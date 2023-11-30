@@ -12,6 +12,7 @@ def build_graph(file_name):
             G.add_edge(node2, node1, weight=weight)  # Adding the reverse edge
     return G
 
+
 def add_edge(graph, tail, head, transmit_time):
     graph.add_edge(tail, head, weight=transmit_time)
     graph.add_edge(head, tail, weight=transmit_time)
