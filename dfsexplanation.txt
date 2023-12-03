@@ -1,0 +1,25 @@
+Algorithm Explanation:
+The algorithm employs a Depth-First Search (DFS) traversal to identify all reachable vertices from each "up" vertex in a directed graph. It initializes an empty dictionary reachable to store the reachable vertices for each "up" vertex.
+
+DFS Function (dfs):
+
+Performs a DFS traversal from a given vertex, marking visited vertices and collecting reachable vertices.
+Traverses through neighboring vertices, excluding those marked as "down" and preventing self-referential loops.
+Main Function (reachable_vertices):
+
+Iterates through each vertex in the graph.
+For each "up" vertex:
+Initializes a visited set to track visited vertices during DFS.
+Performs DFS from the current vertex, collecting reachable vertices in a reachable_set.
+Adds the sorted list of reachable vertices to the reachable dictionary, excluding the vertex itself and self-referential loops.
+Time Complexity Analysis:
+DFS Traversal:
+
+In the worst case, the DFS algorithm visits each vertex and each edge once.
+Let V be the number of vertices and E be the number of edges in the graph.
+The time complexity of DFS is O(V + E), as it visits each vertex and edge at most once during traversal.
+Building Reachable Dictionary:
+
+The algorithm iterates through each vertex once and performs DFS for each "up" vertex.
+Therefore, building the reachable dictionary also has a time complexity of O(V + E), similar to DFS.
+Thus, the overall time complexity of the algorithm is O(V + E), where V is the number of vertices and E is the number of edges in the directed graph. This complexity arises from both the DFS traversal and the process of collecting and storing reachable vertices for each "up" vertex.

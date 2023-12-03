@@ -15,11 +15,27 @@ def build_graph(file_name):
 
 def add_edge(graph, tail, head, transmit_time):
     graph.add_edge(tail, head, weight=transmit_time)
+    graph.add_edge(head, tail, weight=transmit_time)
 
 def delete_edge(graph, tail, head):
     if graph.has_edge(tail, head):
         graph.remove_edge(tail, head)
-        
+    # After deleteedge Duke Education
+    print("Edges around Education:", list(graph.neighbors("Education")))
+    print("Edges around Duke:", list(graph.neighbors("Duke")))
+    # After deleteedge Duke Education
+    edges_education = graph["Education"]
+    edges_duke = graph["Duke"]
+
+    print("Edges around Education:")
+    for neighbor, data in edges_education.items():
+        print(f"Education -> {neighbor}: Weight = {data['weight']}")
+
+    print("\nEdges around Duke:")
+    for neighbor, data in edges_duke.items():
+        print(f"Duke -> {neighbor}: Weight = {data['weight']}")
+
+
 
 def edge_down(graph, tail, head):
     if graph.has_edge(tail, head):
@@ -49,6 +65,14 @@ def dijkstra(graph, start, end):
     pq = []  # Priority queue for Dijkstra's algorithm
     distances = {node: float('inf') for node in graph.nodes}
     distances[start] = 0
+    predecessors = {}  # To store predecessors for path reconstruction
+
+    # Similar to resetting costs and parents in the other code
+    for vertex in graph.nodes:
+        graph.nodes[vertex]['Parent_1'] = None
+        graph.nodes[vertex]['cost'] = float('inf')
+
+    graph.nodes[start]['cost'] = 0
     heapq.heappush(pq, (0, start))
 
     while pq:
@@ -67,17 +91,27 @@ def dijkstra(graph, start, end):
             if neighbor_dist < distances[neighbor]:
                 distances[neighbor] = neighbor_dist
                 heapq.heappush(pq, (neighbor_dist, neighbor))
+                predecessors[neighbor] = (current_node, edge_data['weight'])  # Store predecessor and edge weight for path reconstruction
+                graph.nodes[neighbor]['cost'] = neighbor_dist  # Update cost in the graph
+                graph.nodes[neighbor]['Parent_1'] = current_node  # Update parent in the graph
 
-    path = [end]
+    # Reconstruct path using the graph's stored parents
+    path = []
     while end != start:
-        for predecessor in graph.predecessors(end):
-            if distances[end] == distances[predecessor] + graph[predecessor][end].get('weight', float('inf')):
-                path.append(predecessor)
-                end = predecessor
-                break
+        if end not in predecessors:
+            return [], 0  # No path found
+        path.append(end)
+        end = graph.nodes[end]['Parent_1']  # Retrieve the predecessor from the graph
 
+    path.append(start)
     path.reverse()
     return path, round(distances[path[-1]], 2) if path[-1] != start else 0
+
+
+
+
+
+
 
 
 
