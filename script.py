@@ -79,8 +79,6 @@ def dijkstra(graph, start, end):
     path.reverse()
     return path, round(distances[path[-1]], 2) if path[-1] != start else 0
 
-
-
 def print_graph(graph):
     for node in sorted(graph.nodes()):
         edges = sorted(graph[node].items(), key=lambda x: x[0])
@@ -112,8 +110,6 @@ def reachable_vertices(graph):
             reachable[node] = sorted(reachable_set - {node})
 
     return reachable
-
-
 
 def process_query(graph, query):
     query_data = query.split()
