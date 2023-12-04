@@ -1,7 +1,13 @@
+"""
+Yashwanth Chowdary Kanaparthi
+801364617
+"""
+
 import heapq
 import networkx as nx
 import sys
 
+# Build a directed graph from a file containing edge information
 def build_graph(file_name):
     G = nx.DiGraph()
     with open(file_name, 'r') as file:
@@ -12,19 +18,21 @@ def build_graph(file_name):
             G.add_edge(node2, node1, weight=weight)  # Adding the reverse edge
     return G
 
-
+# Add an edge between tail and head with the given transmit_time
 def add_edge(graph, tail, head, transmit_time):
     graph.add_edge(tail, head, weight=transmit_time)
 
+# Delete an edge between tail and head
 def delete_edge(graph, tail, head):
     if graph.has_edge(tail, head):
         graph.remove_edge(tail, head)
         
-
+# Mark an edge from tail to head as down
 def edge_down(graph, tail, head):
     if graph.has_edge(tail, head):
         graph[tail][head]['down'] = True
 
+# Mark an edge from tail to head as up
 def edge_up(graph, tail_vertex, head_vertex):
     if tail_vertex in graph and head_vertex in graph[tail_vertex]:
         graph[tail_vertex][head_vertex].pop('down', None)
@@ -34,17 +42,20 @@ def edge_up(graph, tail_vertex, head_vertex):
         return True
     return False
 
+# Mark a vertex as down
 def vertex_down(graph, vertex):
     if graph.has_node(vertex):
         graph.nodes[vertex]['down'] = True
 
+# Mark a vertex as up
 def vertex_up(graph, vertex):
     if vertex in graph.nodes():
         graph.nodes[vertex].pop('down', None)
         return True
     return False
 
-
+# Dijkstra's algorithm to find the shortest path from start to end in the graph
+# Returns the shortest path and its total cost
 def dijkstra(graph, start, end):
     pq = []  # Priority queue for Dijkstra's algorithm
     distances = {node: float('inf') for node in graph.nodes}
@@ -79,6 +90,7 @@ def dijkstra(graph, start, end):
     path.reverse()
     return path, round(distances[path[-1]], 2) if path[-1] != start else 0
 
+# Print the graph with edge weights and marked "down" vertices/edges
 def print_graph(graph):
     for node in sorted(graph.nodes()):
         edges = sorted(graph[node].items(), key=lambda x: x[0])
@@ -92,6 +104,7 @@ def print_graph(graph):
             else:
                 print(f"{neighbor} {data['weight']}")
 
+# Find reachable vertices in the graph excluding those marked "down"
 def reachable_vertices(graph):
     reachable = {}
 
@@ -111,6 +124,7 @@ def reachable_vertices(graph):
 
     return reachable
 
+# Process user queries to modify the graph or find paths
 def process_query(graph, query):
     query_data = query.split()
     command = query_data[0]
@@ -157,21 +171,16 @@ def process_query(graph, query):
     else:
         print("Invalid command")
 
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python script.py network.txt")
-        sys.exit(1)
+file_name = sys.argv[1]
+graph = build_graph(file_name)
+print("Graph built successfully.")
     
-    file_name = sys.argv[1]
-    graph = build_graph(file_name)
-    print("Graph built successfully.")
-    
-    # Handling queries from standard input
-    while True:
-        try:
-            query = input("Enter query: ")
-            if query.lower() == "exit":
-                break
-            process_query(graph, query)
-        except EOFError:
+# Handling queries from standard input
+while True:
+    try:
+        query = input("Enter query: ")
+        if query.lower() == "exit":
             break
+        process_query(graph, query)
+    except EOFError:
+        break
