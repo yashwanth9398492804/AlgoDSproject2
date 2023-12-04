@@ -105,6 +105,13 @@ def print_graph(graph):
                 print(f"{neighbor} {data['weight']}")
 
 # Find reachable vertices in the graph excluding those marked "down"
+"""
+The algorithm iterates through each vertex once and performs DFS for each "up" vertex.
+Therefore, building the reachable dictionary also has a time complexity of O(V + E), similar to DFS.
+Thus, the overall time complexity of the algorithm is O(V + E), 
+where V is the number of vertices and E is the number of edges in the directed graph.
+This complexity arises from both the DFS traversal and the process of collecting and storing reachable vertices for each "up" vertex.
+"""
 def reachable_vertices(graph):
     reachable = {}
 
